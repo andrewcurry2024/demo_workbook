@@ -21,14 +21,21 @@ docker compose up --build
 Example structure:
 
 ```text
-.
+├── car_schema.png
+├── db
+│   ├── init
+│   └── schema.dump
+├── demo.md
 ├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-├── notebooks/
-├── data/
-├── src/
-└── README.md
+├── jupyter
+│   ├── Dockerfile
+│   ├── migrated
+│   └── requirements.txt
+├── notebooks
+│   ├── example.ipynb
+│   └── export.csv
+├── README.md
+└── work
 ```
 
 ---
@@ -123,21 +130,21 @@ Typical usage:
 
 ---
 
-## `data/`
+## `db/`
 
 Stores datasets used by notebooks/scripts.
 
 Examples:
 
 ```text
-data/
-├── cars.csv
-└── processed/
+├── db
+│   ├── init
+│   └── schema.dump
 ```
 
 ---
 
-## `src/`
+## `notebooks/`
 
 Contains reusable Python code.
 
