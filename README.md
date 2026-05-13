@@ -207,7 +207,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: cars_db
+      POSTGRES_DB: multiverses
     ports:
       - "5432:5432"
 ```
@@ -243,13 +243,13 @@ SET search_path TO car_schema
 # Python connection
 
 ```python
-postgresql://postgres:postgres@postgres:5432/cars_db
+postgresql://postgres:postgres@postgres:5432/multiverses
 ```
 
 ```python
 from sqlalchemy import create_engine
 
-engine = create_engine("postgresql://postgres:postgres@postgres:5432/cars_db")
+engine = create_engine("postgresql://postgres:postgres@postgres:5432/multiverses")
 ```
 
 ---
@@ -257,5 +257,5 @@ engine = create_engine("postgresql://postgres:postgres@postgres:5432/cars_db")
 # Host connection
 
 ```bash
-psql -h localhost -U postgres -d cars_db
+psql -h localhost -U multiverses -d multiverses
 ```
