@@ -61,13 +61,13 @@ services:
   jupyter:
     build: .
     ports:
-      - "18890:8888"
+      - "18890:18890"
 ```
 
 This maps:
 
 ```text
-host port 18890 → container port 8888
+host port 18890 → container port 18890
 ```
 
 ---
@@ -182,7 +182,7 @@ Example:
 ```dockerfile
 CMD ["jupyter", "lab",
      "--ip=0.0.0.0",
-     "--port=8888",
+     "--port=18890",
      "--no-browser",
      "--allow-root",
      "--IdentityProvider.token=<TOKEN>"]
@@ -198,9 +198,9 @@ http://127.0.0.1:18890/lab?token=mytoken123
 
 # Port Mapping Explanation
 
-18890:8888 means:
+18890:18890 means:
 
-- container runs on 8888
+- container runs on 18890
 - host accesses via 18890
 
 ---
