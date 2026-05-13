@@ -225,7 +225,8 @@ docker compose exec postgres psql -U postgres
 ## Specific DB
 
 ```bash
-docker compose exec postgres psql -U postgres -d cars_db
+docker compose exec postgres psql -U multiverses -d multiverses
+SET search_path TO car_schema
 ```
 
 ---
