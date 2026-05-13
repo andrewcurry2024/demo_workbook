@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    restart: always
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db:/dump   # <-- for schema.dump access
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+  db_restore:
+    image: postgres:16
+    container_name: db_restore
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    volumes:
+      - ./db:/dump
+
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+
+    entrypoint: >
+      bash -c "
+      echo 'Restoring database...' &&
+      pg_restore -h postgres -U ${POSTGRES_USER} -d ${POSTGRES_DB} /dump/schema.dump &&
+      echo 'Restore complete'
+      "
+
+
+  jupyter:
+    image: jupyter/base-notebook:latest
+    container_name: jupyter
+    restart: always
+
+    ports:
+      - "18890:18890"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+      JUPYTER_TOKEN: ""
+      JUPYTER_PASSWORD: ""
+
+    volumes:
+      - ./notebooks:/home/jovyan/work
+
+    command: >
+      start-notebook.py
+      --ServerApp.ip=0.0.0.0
+      --ServerApp.port=18890
+      --IdentityProvider.token='testing12'
+      --ServerApp.password='testing12'
+      --ServerApp.allow_origin='*'
+      --ServerApp.disable_check_xsrf=True
+
+
+volumes:
+  pgdata:
